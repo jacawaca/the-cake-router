@@ -1,8 +1,8 @@
 # The cake router
 **UWAGA** Polecamy zapoznać się z HTMLową wersję niniejszej
 specyfikacji dostępnej w repozytorium Github
-[link](https://github.com/jacawaca/the-cake-router)
-.
+[link](https://github.com/jacawaca/the-cake-router) .
+
 ## Trasowanie cebulowe
 Trasowanie cebulowe jest techniką służącą do anonimowej komunikacji w sieci
 komputerowej. Komunikacja odbywa się przy wykorzystaniu trzech rodzajów
