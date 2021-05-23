@@ -25,6 +25,9 @@ import java.util.List;
 public class UDPNode {
 	static String prevAdress;
 	private static boolean debug=true;
+	// TODO możliwość ręcznego wpisania?
+	// Wyświetla się pytanie: czy chesz ręcznie wpisać
+	// i wybierasz. Jak nie, to idzie domyślna.
 	private static String returnMessage = "Paczka dotarła cała i zdrowa.";
 	
 	 public static void main(String[] args) throws Exception{
@@ -72,7 +75,7 @@ public class UDPNode {
 	            	
 	            	if(prevAdress==null) {
 			            // Zapisujemy do pamięci poprzedni adres
-			            prevAdress = address.toString(); // może to jakoś polepszyć. Zrobić pole z adress?
+			            prevAdress = address.toString(); // TODO może to jakoś polepszyć. Zrobić pole z adress?
 			            //Na razie InetAdress::toString dodaje / na początku. Usunę to ręcznie
 			            prevAdress = prevAdress.substring(1);
 	            	}
@@ -80,7 +83,7 @@ public class UDPNode {
 	            	System.out.println("Wiadomość dotarła. Odsyłam wiadomość na poprzedni adres: "+prevAdress);
 	            	// Odsyłamy (POPRAWKA)
 	            	if(debug) System.out.println("NEXT ADRESS = "+prevAdress);
-	            	InetAddress serverAddress = InetAddress.getByName(prevAdress); //zamiast "localhost"
+	            	InetAddress serverAddress = InetAddress.getByName(prevAdress);
 		            System.out.println(serverAddress);
 	
 		            DatagramSocket socket = new DatagramSocket(); //Otwarcie gniazda
@@ -108,7 +111,7 @@ public class UDPNode {
 	            else if(partsOfString.length > 1) { // Gdy są podane adresy
 	            	
 		            // Zapisujemy do pamięci poprzedni adres
-		            prevAdress = address.toString(); // może to jakoś polepszyć. Zrobić pole z adress?
+		            prevAdress = address.toString(); // TODO Może ulepszyć jak wyżej
 		            //Na razie InetAdress::toString dodaje / na początku. Usunę to ręcznie
 		            prevAdress = prevAdress.substring(1);         	
 	            	
@@ -144,41 +147,7 @@ public class UDPNode {
 	            }
 	            
 	            else System.out.println("Zła wiadomość");
-	            
-	            
-	            
-	            
-	            
-	            
-       
-
-	            
-//	            sendMessage(sendenMessage,partsOfString);
-	            
-	            // Wysyłam
-	            // UDPClient
-//	            String message2Send =  sendenMessage;
-//	            InetAddress serverAddress = InetAddress.getByName(nextAdress); //zamiast "localhost"
-//	            System.out.println(serverAddress);
-//
-//	            DatagramSocket socket = new DatagramSocket(); //Otwarcie gniazda
-//	            byte[] stringContents = message2Send.getBytes("utf8"); //Pobranie strumienia bajtów z wiadomosci
-//
-//	            DatagramPacket sentPacket = new DatagramPacket(stringContents, stringContents.length);
-//	            sentPacket.setAddress(serverAddress);
-//	            sentPacket.setPort(Config.PORT);
-//	            socket.send(sentPacket);
-//
-//	            DatagramPacket recievePacket = new DatagramPacket( new byte[Config.BUFFER_SIZE], Config.BUFFER_SIZE);
-//	            socket.setSoTimeout(1010);
-//
-//	            try{
-//	                socket.receive(recievePacket);
-//	                System.out.println("Serwer otrzymał wiadomość");
-//	            }catch (SocketTimeoutException ste){
-//	                System.out.println("Serwer nie odpowiedział, więc albo dostał wiadomość albo nie...");
-//	            }
-	            
+ 
 	            
 	            
 	        }

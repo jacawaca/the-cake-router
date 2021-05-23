@@ -27,12 +27,12 @@ Nasz program będzie spełniał następujące wymagania:
 - umożliwi przesyłanie komunikatów UDP (*user datagram protocol*, protokół
 bezstanowy, nie zapewnia retransmisji danych, umożliwia przesyłanie danych
 do wielu użytkowników).
-- możliwość sprawdzenia poprawności danych przy użyciu sumy kontrolnej (np.
-*sha256sum*)
+- ~~możliwość sprawdzenia poprawności danych przy użyciu sumy kontrolnej (np.
+*sha256sum*)~~
 - Klient będzie posiadał listę wszystkich węzłów pośredniczących ($P_i$ oraz WK).
-- Z poziomu klienta będzie możliwy wybór trasy przez N węzłów pośredniczących 
+- ~~Z poziomu klienta będzie możliwy wybór trasy przez N węzłów pośredniczących 
 (na podstawie powyższej listy). Liczba N będzie dowolna, ale mniejsza od ilości
-dostępnych węzłów pośredniczących.
+dostępnych węzłów pośredniczących.~~
 - Komunikaty będą zawierały paczkę złożoną z informacji przesyłanych oraz
 adresów
 - Możliwe będzie przesłanie paczki do innego hosta (który również
@@ -47,25 +47,32 @@ Zakładamy, że program będzi mógł być używany w następujący sposób
 usage: cake-router [options]
 options:
 -l --list                             Wyświetla listę dostępnych hostów.  
-Mogą posłużyć do wyboru węzłów pośrednich przy próbie wysłania
-
--s --send [adress] [trasa] [num]  Wysyła komunikat na podany adres.
+``````
+~~Mogą posłużyć do wyboru węzłów pośrednich przy próbie wysłania~~
+Będzie wczytywał plik config
+```bash
+-s --send [adress] ~~[trasa]~~ [num]
+```
+Wysyła komunikat na podany adres.
 W przypadku gdyby adres nie został podany, użytkownik ma możliwość
 wyboru adresu z listy. Ewentualnie wyświetli mu się taka lista,
 na podstawie której będzie mógł wybrać adres.
-Gdyby trasa nie została podana, to program - o ile to możliwe - 
+~~Gdyby trasa nie została podana, to program - o ile to możliwe - 
 użyje domyślnej (wczyta z pliku). Jest możliwość wyboru
-ilości węzłów pośredniczących [num]. Wówczas te węzły są losowe.
-
---set-trasa                           Ustala domyślą trasę.
-
+ilości węzłów pośredniczących [num]. Wówczas te węzły są losowe.~~
+```
+--set-trasa                           Ustala domyślną trasę.
+```
+Program generujący plik konfiguracyjny (FUNKCJONALNOŚĆ OPCJONALNA)
+```
 --listen                              Nasłuchuj komunikatów.
 
 --help                                Wyświetla ten komunikat.
 ```
 Rozpatrujemy możliwość zadeklarowania trasy poprzez specjalny
-plik lub odpowiednio zadeklarowaną przy wywołaniu programu
-listę.
+plik ~~lub odpowiednio zadeklarowaną przy wywołaniu programu
+listę.~~ lub poprzez miniprogram, który uruchomi na się przy użyciu opcji
+--set-trasa.
 ## Obsługa programu
 Klient uruchamia program cake-router w bashu poprzez wpisanie
 ``` bash
@@ -76,9 +83,40 @@ uruchamia program z opcją list
 ``` bash
 $ cake-router -l
 ```
-Dostaje informacje o możliwych węzłach pośrednich (i docelowych).
-Przygotowuje trasę i wysyła komunikat np na adres lokalny 192.168.1.03 poprzez 3 węzły pośredniczące
+Dostaje informacje o ~~możliwych węzłach pośrednich (i docelowych).~~ węzłach
+pośrednich z listy conf.
+
+~~Przygotowuje trasę i wysyła komunikat np na adres lokalny 192.168.1.03 poprzez 3 węzły pośredniczące~~
+
+Po wysłaniu użytkownik programu oczekuje na odpowiedź od nadawcy.
+
+## TO DO
+[//]: # (Aby oznaczyć pozycję w liście za zrobioną zamień [ ] na [X])
+- [ ] 1. Skrypt w Shellu. Uruchomienie programu poprzez javę (coś jak 
 ``` sh
-$ cake-router -s 192.168.1.02 3
+java -jar coś tam coś tam
 ```
-dalej użytkownik programu oczekuje na odpowiedź od nadawcy.
+  )
+- [ ] 1.1 Skrypt dla klienta
+- [ ] 1.2 i dla węzła (Node)
+- [ ] 2. Obsługa dwóch klientów na raz. Jeśli to rozumiem tak, że paczki są przesyłanej
+  w tej samej chwili (a nie po sobie), to trzeba będzie pewnie coś pokombinować z tym, jak
+  prevAdress jest używany. Może lista zbiorów {prevAdress, message} tak, żeby można
+  było zidentyfikować prevAdress z każdym kolejnym klientem.
+- [ ] 3. Posprzątać javę: adres jest trzymany w stringu. Można w InetAdress (zamienić pola)
+- [ ] 4  W niektórych miejscach kopiowałem kod. Można by zrobić jakąś procedurę jako
+  static w UPDNode. Ale nie trzeba. W sumie łączy się z 3.
+- [ ] 5  Niech ostatni węzeł (adresat) wyświetla otrzymaną wiadomość.
+- [ ] 6  Możliwość ręcznego wpisania odpowiedzi? Wówczas trzeba by ustawić odpowiednio
+  input w UDPNode.
+- [ ] 7 W ogóle nie wiem, czy nie trzeba będzie rozdzielić przypadków, gdy i) wiadomość
+  dochodzi do adresata ii) wiadomość wraca po węzłach pośredniczących? Łączy się to
+  z 6. i 3., 4. i może 2.
+Poniższe rzeczy to po tym jak już zrobimy skrypt (front-end) w bashu na choćby *minimalnej
+funkcjonalności*.
+- [ ] 8  Skrypt w Shellu: opcja list
+- [ ] 9  Skrypt w Shellu: opcja send z różnymi plikami wiadomości
+- [ ] 10 Skrypt w Shellu: opcja *set trasa* (OPCJONALNIE)
+- [ ] 11 Skrypt w Shellu: inne opcje?
+- [ ] 12 Skrypt w Shellu: testowanie błędów: co gdy nie ma zainstalowanej javy itp
+- [ ] 13
