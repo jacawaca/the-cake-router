@@ -1,3 +1,2 @@
 * linguist-vendored
-*.sh linguist-vendored=true
-*.java linguist-vendored=true
+*.sh *.java linguist-vendored=true
