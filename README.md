@@ -106,9 +106,9 @@ java -jar coś tam coś tam
 - [ ] 3. Posprzątać javę: adres jest trzymany w stringu. Można w InetAdress (zamienić pola)
 - [ ] 4  W niektórych miejscach kopiowałem kod. Można by zrobić jakąś procedurę jako
   static w UPDNode. Ale nie trzeba. W sumie łączy się z 3.
-- [ ] 5  Niech ostatni węzeł (adresat) wyświetla otrzymaną wiadomość.
-- [ ] 6  Możliwość ręcznego wpisania odpowiedzi? Wówczas trzeba by ustawić odpowiednio
-  input w UDPNode.
+- [X] 5  Niech ostatni węzeł (adresat) wyświetla otrzymaną wiadomość. JS
+- [X] 6  Możliwość ręcznego wpisania odpowiedzi? Wówczas trzeba by ustawić odpowiednio
+  input w UDPNode. JS
 - [ ] 7 W ogóle nie wiem, czy nie trzeba będzie rozdzielić przypadków, gdy i) wiadomość
   dochodzi do adresata ii) wiadomość wraca po węzłach pośredniczących? Łączy się to
   z 6. i 3., 4. i może 2.
