@@ -28,20 +28,31 @@ Nasz program będzie spełniał następujące wymagania:
 bezstanowy, nie zapewnia retransmisji danych, umożliwia przesyłanie danych
 do wielu użytkowników).
 - ~~możliwość sprawdzenia poprawności danych przy użyciu sumy kontrolnej (np.
-*sha256sum*)~~
+*sha256sum*)~~ Użytkownik otrzymuje instrukcję dotyczącą tego, w jaki sposób może wykonać kontrolę danych. Np. tak
+```bash
+$ ./CakeClient.sh --help
+```
 - Klient będzie posiadał listę wszystkich węzłów pośredniczących ($P_i$ oraz WK).
 - ~~Z poziomu klienta będzie możliwy wybór trasy przez N węzłów pośredniczących 
-(na podstawie powyższej listy). Liczba N będzie dowolna, ale mniejsza od ilości
+(na podstawie powyższej listy). Liczba N będzie dowolna, ale mniejsza od ilości.
 dostępnych węzłów pośredniczących.~~
+Klient będzie mógł wygenerować listę węzłów pośrednich za pomocą
+odpowiedniej funkcji.
 - Komunikaty będą zawierały paczkę złożoną z informacji przesyłanych oraz
 adresów
 - Możliwe będzie przesłanie paczki do innego hosta (który również
-«oferuje» swoje usługi jako węzeł pośredni) i otrzymanie od niego odpowiedzi.
-- Sieć będzie w stanie obsłużyć równolegle przynajmniej dwóch klientów.
+«oferuje» swoje usługi jako węzeł pośredni) i otrzymanie od niego odpowiedzi. W zasadzie, możliwe będzie wysłanie paczki do każdego hosta (węzła). Program węzła pośredniego i adresata jest ten sam.
+- Sieć będzie w stanie obsłużyć równolegle przynajmniej dwóch klientów oraz wielu klientów po sobie. Wiadomość powrotna będzie wysyłana każdemu osobno.
 
 ## Opis działania programu
-Klient będzie uruchamiał program poprzez poprzez prosty alias. Na potrzeby robocze
-załóżmy, że będzie to cake-router.
+Klient będzie mógł uruchamiać program poprzez poprzez prosty alias. Na potrzeby robocze
+załóżmy, że będzie to cake-router. Aby to osiągnąć, wystarczy
+wykonać na przykład
+```sh
+$ sudo echo "export cake-router=./path/to/file/CakeClient.sh" >> ~/.bash_aliases
+$ cd ~
+$ . .bashrc
+```
 Zakładamy, że program będzi mógł być używany w następujący sposób
 ``` bash
 usage: cake-router [options]
