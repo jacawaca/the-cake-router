@@ -97,8 +97,8 @@ Po wysłaniu użytkownik programu oczekuje na odpowiedź od nadawcy.
 java -jar coś tam coś tam
 ```
   )
-- [ ] 1.1 Skrypt dla klienta
-- [ ] 1.2 i dla węzła (Node)
+- [X] 1.1 Skrypt dla klienta
+- [X] 1.2 i dla węzła (Node)
 - [X] 2. Obsługa dwóch klientów na raz. Jeśli to rozumiem tak, że paczki są przesyłanej
   w tej samej chwili (a nie po sobie), to trzeba będzie pewnie coś pokombinować z tym, jak
   prevAdress jest używany. Może lista zbiorów {prevAdress, message} tak, żeby można
@@ -117,9 +117,11 @@ java -jar coś tam coś tam
   
 Poniższe rzeczy to po tym jak już zrobimy skrypt (front-end) w bashu na choćby *minimalnej
 funkcjonalności*.
-- [ ] 8  Skrypt w Shellu: opcja list
-- [ ] 9  Skrypt w Shellu: opcja send z różnymi plikami wiadomości
-- [ ] 10 Skrypt w Shellu: opcja *set trasa* (OPCJONALNIE)
+- [X] 8  Skrypt w Shellu: opcja list JS
+- [X] 9  Skrypt w Shellu: opcja send z różnymi plikami wiadomości JS
+- [X] 10 Skrypt w Shellu: opcja *set trasa* (OPCJONALNIE) JS
 - [ ] 11 Skrypt w Shellu: inne opcje?
-- [ ] 12 Skrypt w Shellu: testowanie błędów: co gdy nie ma zainstalowanej javy itp
+- [X] 12 Skrypt w Shellu: testowanie błędów: co gdy nie ma zainstalowanej javy itp
+Napisałem, ale nwm czy działa JS
+
 - [ ] 13
