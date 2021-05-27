@@ -114,6 +114,7 @@ java -jar coś tam coś tam
   dochodzi do adresata ii) wiadomość wraca po węzłach pośredniczących? Łączy się to
   z 6. i 3., 4. i może 2.
   Udało się to połączyć w CakeClient JS
+  
 Poniższe rzeczy to po tym jak już zrobimy skrypt (front-end) w bashu na choćby *minimalnej
 funkcjonalności*.
 - [ ] 8  Skrypt w Shellu: opcja list
