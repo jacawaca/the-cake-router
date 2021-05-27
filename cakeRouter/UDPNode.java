@@ -3,40 +3,40 @@
  */
 package cakeRouter;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.FileWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-
-import udp.Config;
-
-import java.util.ArrayList;  
-import java.util.Arrays;  
-import java.util.List;  
+import java.util.Scanner;  
 
 /**
  * @author Jacek Strzałkowski jacek.strzalkowski.stud@pw.edu.pl
+ * @author Paweł Polak
+ * @author Ryszard Michalski
  *
  */
 public class UDPNode {
-	static String prevAdress;
-	private static boolean debug=true;
-	// TODO możliwość ręcznego wpisania?
-	// Wyświetla się pytanie: czy chesz ręcznie wpisać
-	// i wybierasz. Jak nie, to idzie domyślna.
-	private static String returnMessage = "Paczka dotarła cała i zdrowa.";
+	private static InetAddress prevAdress[] = {null,null};
+	private static InetAddress nextAdress[] = {null,null};
+	private static boolean debug=false;
+	private static String defaultReturnMessage = "Wiadomość dotarła. Brak odpowiedzi.";
+	private static String returnMessage = defaultReturnMessage;
+	private static Scanner sc;
 	
-	 public static void main(String[] args) throws Exception{
+	@SuppressWarnings("resource")
+	public static void main(String[] args) throws Exception{
 		 	System.out.println("Gałąź ruszyła!");
 	        //Otwarcie gniazda z okreslonym portem
 	        DatagramSocket datagramSocket = new DatagramSocket(Config.PORT);
 
 	        byte[] byteResponse = "Uzyskałem wiadomość.".getBytes("utf8");
+	        
+            sc = new Scanner(System.in);
 
+            // Do skanera
+            String typedMessage, fileNameOut;
+            boolean doYouWant2File;
 	        while (true){
 
 	            DatagramPacket receivedPacket
@@ -72,18 +72,73 @@ public class UDPNode {
 	            String[] partsOfString = message.split(";"); // senden message - 1
 	                     
 	            if(partsOfString.length == 1) { // Powrót
-	            	
-	            	if(prevAdress==null) {
+	            	int nchange=0;
+	            	if(nextAdress[0] == null && nextAdress[1] == null &&
+	            			(prevAdress[0]==null || prevAdress[1] == null)
+	            			) {
+	            		// sytuacja węzła docelowego. Pośrednie mają 
 			            // Zapisujemy do pamięci poprzedni adres
-			            prevAdress = address.toString(); // TODO może to jakoś polepszyć. Zrobić pole z adress?
-			            //Na razie InetAdress::toString dodaje / na początku. Usunę to ręcznie
-			            prevAdress = prevAdress.substring(1);
+	            		if(prevAdress[0] == null) nchange = 0;
+	            		else if(prevAdress[1] == null) nchange = 1;
+	            		
+	            		prevAdress[nchange] = address;
+			            
+			            // Wyświetlamy wiadomość
+			            System.out.println(partsOfString[0]);
+			            System.out.println("Czy chcesz zapisać wiadomość do pliku tekstowego. Wpisz wartość logiczną");
+			            doYouWant2File = sc.nextBoolean(); sc.nextLine();
+			            if(doYouWant2File) {
+			            	System.out.println("Wpisz nazwę pliku. Pamiętaj o końcówce .txt i uważaj, żeby nic nie nadpisać.");
+			            	
+			            	while(true) {
+			            		fileNameOut = sc.nextLine();
+			            		if(! fileNameOut.isBlank()) break;
+			            	}
+			            	      	
+				            FileWriter msgWriter = new FileWriter(fileNameOut);
+				            msgWriter.write(partsOfString[0]);
+				            msgWriter.close();
+			            }
+			            // odpisanie
+			            System.out.println("Proszę wpisać poniżej odpowiedź. Nie używaj średnika ;");
+			            while(true) {
+			            	typedMessage = sc.nextLine();
+			            	if(! typedMessage.contains(";")) break;
+			            	else System.err.println("Użyłeś średnika. Spróbuj jeszcze raz.");
+			            }
+			            if(typedMessage.isBlank()) returnMessage = defaultReturnMessage;
+			            else returnMessage = typedMessage;
+	            		System.out.println("Wysyłam:\n"+returnMessage);
+	            	}
+	            	else { // powrót. Węzły pośrednie
+	            		returnMessage = partsOfString[0];
+	            		// Z którego adresu przyszła wiadomość
+	            		if(nextAdress[0] != null && address.getHostAddress() == nextAdress[0].getHostAddress()) {
+	            			nextAdress[0] = null;
+	            			if(nextAdress[1] != null) {
+	            				nextAdress[0] = nextAdress[1]; nextAdress[1] =null;
+	            			}
+	            		}
+	            		else if(nextAdress[1] != null && address.getHostAddress() == nextAdress[1].getHostAddress()) {
+	            			nextAdress[1] = null;
+	            		}
 	            	}
 		            
 	            	System.out.println("Wiadomość dotarła. Odsyłam wiadomość na poprzedni adres: "+prevAdress);
 	            	// Odsyłamy (POPRAWKA)
 	            	if(debug) System.out.println("NEXT ADRESS = "+prevAdress);
-	            	InetAddress serverAddress = InetAddress.getByName(prevAdress);
+	            	InetAddress serverAddress = prevAdress[nchange];
+	            	
+	            	// usuwamy odpowiedni prevAdress
+	            	
+	            	if(nchange == 1) {
+	            		prevAdress[1] = null;
+	            	}
+	            	else if(nchange == 0) {
+	            		prevAdress[0] = prevAdress[1];
+	            		prevAdress[1] = null;
+	            	}
+	            	
 		            System.out.println(serverAddress);
 	
 		            DatagramSocket socket = new DatagramSocket(); //Otwarcie gniazda
@@ -109,19 +164,26 @@ public class UDPNode {
 	            	
 	            }
 	            else if(partsOfString.length > 1) { // Gdy są podane adresy
+	            	int nchange =0;
+//		            // Zapisujemy do pamięci poprzedni adres
+	            	if(prevAdress[0] == null) nchange=0;
+	            	else if(prevAdress[1] == null) nchange = 1;
+	            	else {
+	            		System.err.println("Błąd! Node potrafi obsłużyć tylko dwóch klientów równolegle. Poczekaj.");
+	            		System.exit(1);
+	            	}
+	            	prevAdress[nchange] = address;
 	            	
-		            // Zapisujemy do pamięci poprzedni adres
-		            prevAdress = address.toString(); // TODO Może ulepszyć jak wyżej
-		            //Na razie InetAdress::toString dodaje / na początku. Usunę to ręcznie
-		            prevAdress = prevAdress.substring(1);         	
-	            	
-	            	String nextAdress = partsOfString[0];
+	            	String nextAdressString = partsOfString[0];
 	            	String message2Send="";
 	            	for(int i=1;i<partsOfString.length;i++) message2Send += partsOfString[i]+";";
 	            	// Wysyłka
 	            	// UDPClient
 	            	if(debug) System.out.println("Paczka do przesłania\n"+message2Send);
-		            InetAddress serverAddress = InetAddress.getByName(nextAdress); //zamiast "localhost"
+		            InetAddress serverAddress = InetAddress.getByName(nextAdressString); //zamiast "localhost"
+		            
+		            nextAdress[nchange] = serverAddress;
+		            
 		            System.out.println(serverAddress);
 	
 		            DatagramSocket socket = new DatagramSocket(); //Otwarcie gniazda
@@ -139,9 +201,9 @@ public class UDPNode {
 	
 		            try{
 		                socket.receive(recievePacket);
-		                System.out.println("Serwer otrzymał wiadomość");
+		                if(debug) System.out.println("Serwer otrzymał wiadomość");
 		            }catch (SocketTimeoutException ste){
-		                System.out.println("Serwer nie odpowiedział, więc albo dostał wiadomość albo nie...");
+		                if(debug) System.out.println("Serwer nie odpowiedział, więc albo dostał wiadomość albo nie...");
 		            }
 		            // Koniec wysyłki
 	            }

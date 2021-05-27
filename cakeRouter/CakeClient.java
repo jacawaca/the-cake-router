@@ -1,8 +1,10 @@
+/**
+ * @author Ryszard Michalski
+ * @author Paweł Polak
+ * @author Jacek Strzałkowski jacek.strzalkowski.stud@pw.edu.pl
+ */
 package cakeRouter;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -10,17 +12,15 @@ import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
-
-import udp.Config;
 
 public class CakeClient {
 	private static String adress; // wysyłka
 	private static List<String> nodeAdresses;
 	private static String message;
-	private static boolean debug = true;
+	private static boolean debug = false;
 
+	@SuppressWarnings("resource")
 	public static void main(String[] args) throws IOException, Exception {
 		// Wczytanie węzłów pośrednich
 		adress = args[0];
@@ -35,7 +35,7 @@ public class CakeClient {
 		// Wysyłka na adres
 		String stringServerAdress = nodeAdresses.get(0);
         InetAddress serverAddress = InetAddress.getByName(stringServerAdress); //zamiast "localhost"
-        System.out.println(serverAddress);
+        if(debug) System.out.println(serverAddress);
 
         DatagramSocket socket = new DatagramSocket(); //Otwarcie gniazda
         
@@ -57,13 +57,14 @@ public class CakeClient {
 
         try{
             socket.receive(recievePacket);
-            System.out.println("1. węzeł otrzymał wiadomość");
+            if(debug) System.out.println("1. węzeł otrzymał wiadomość");
         }catch (SocketTimeoutException ste){
-            System.out.println("1. węzeł nie odpowiedział.");
+            if(debug) System.out.println("1. węzeł nie odpowiedział.");
         }
         
         // Czekanie na odpowiedź od adresata
         //Otwarcie gniazda z okreslonym portem
+        
         DatagramSocket datagramSocket = new DatagramSocket(Config.PORT);
 
         byte[] byteResponse = "OK".getBytes("utf8");
