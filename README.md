@@ -99,19 +99,21 @@ java -jar coś tam coś tam
   )
 - [ ] 1.1 Skrypt dla klienta
 - [ ] 1.2 i dla węzła (Node)
-- [ ] 2. Obsługa dwóch klientów na raz. Jeśli to rozumiem tak, że paczki są przesyłanej
+- [X] 2. Obsługa dwóch klientów na raz. Jeśli to rozumiem tak, że paczki są przesyłanej
   w tej samej chwili (a nie po sobie), to trzeba będzie pewnie coś pokombinować z tym, jak
   prevAdress jest używany. Może lista zbiorów {prevAdress, message} tak, żeby można
+  Działa dla klientów mających różne IP. Inaczej port jest zablokowany. JS
   było zidentyfikować prevAdress z każdym kolejnym klientem.
-- [ ] 3. Posprzątać javę: adres jest trzymany w stringu. Można w InetAdress (zamienić pola)
+- [X] 3. Posprzątać javę: adres jest trzymany w stringu. Można w InetAdress (zamienić pola) JS
 - [ ] 4  W niektórych miejscach kopiowałem kod. Można by zrobić jakąś procedurę jako
   static w UPDNode. Ale nie trzeba. W sumie łączy się z 3.
 - [X] 5  Niech ostatni węzeł (adresat) wyświetla otrzymaną wiadomość. JS
 - [X] 6  Możliwość ręcznego wpisania odpowiedzi? Wówczas trzeba by ustawić odpowiednio
   input w UDPNode. JS
-- [ ] 7 W ogóle nie wiem, czy nie trzeba będzie rozdzielić przypadków, gdy i) wiadomość
+- [X] 7 W ogóle nie wiem, czy nie trzeba będzie rozdzielić przypadków, gdy i) wiadomość
   dochodzi do adresata ii) wiadomość wraca po węzłach pośredniczących? Łączy się to
   z 6. i 3., 4. i może 2.
+  Udało się to połączyć w CakeClient JS
 Poniższe rzeczy to po tym jak już zrobimy skrypt (front-end) w bashu na choćby *minimalnej
 funkcjonalności*.
 - [ ] 8  Skrypt w Shellu: opcja list
