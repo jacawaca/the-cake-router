@@ -83,4 +83,7 @@ $ ./CakeNode.sh
 ```
 Gdy paczka dojdzie do adresata, będzie miał możliwość zapisania wiadomości do pliku oraz odpowiedzi.
 ## Działanie
+Nadanie wiadomości i wybór trasy
+![ClientServer](fig/trasaIWysyla.gif)
 Nadanie wiadomości poprzez dwa węzły pośrednie
+![Two clients](fig/Clients2.gif)
