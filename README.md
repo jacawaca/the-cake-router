@@ -46,7 +46,7 @@ odpowiedniej funkcji.
 - [X] Adresat będzie zabezpieczony przed wpisaniem wiadomości z 
 ```;```
 - [X] Przed uruchomieniem programu klienckiego, program (z poziomu powłoki) sprawdzi, czy jest zainstalowana java.
-## Opis działania programu
+## Obsługa programu
 Klient będzie mógł uruchamiać program poprzez poprzez prosty alias. Na potrzeby robocze
 załóżmy, że będzie to cake-router. Aby to osiągnąć, wystarczy
 wykonać na przykład
@@ -55,31 +55,7 @@ $ sudo echo "export cake-router=./path/to/file/CakeClient.sh" >> ~/.bash_aliases
 $ cd ~
 $ . .bashrc
 ```
-Zakładamy, że program będzie mógł być używany w następujący sposób
-``` bash
-usage: cake-router [options]
-options:
--l --list                             Wyświetla listę dostępnych hostów.  
-``````
-Będzie wczytywał plik config
-```bash
--s --send [adress]  [msg]
-```
-Wysyła komunikat na podany adres.
-Pozostałe opcje
-```
---set-trasa                           Ustala domyślną trasę.
-```
-Program generujący plik konfiguracyjny
-```
---help                                Wyświetla ten komunikat.
-```
-Rozpatrujemy możliwość zadeklarowania trasy poprzez specjalny
-plik ~~lub odpowiednio zadeklarowaną przy wywołaniu programu
-listę.~~ lub poprzez miniprogram, który uruchomi na się przy użyciu opcji
---set-trasa.
-## Obsługa programu
-Klient uruchamia program cake-router w bashu poprzez wpisanie nazwy skryptu np. ```./CakeClient.sh``` lub (Patrz instrukcja) za pomocą odpowiedniego aliasu.
+Klient uruchamia program cake-router w bashu poprzez wpisanie nazwy skryptu np. ```./CakeClient.sh``` lub (Patrz instrukcja) za pomocą aliasu.
 ```
 $ cake-router --help
 ```
@@ -106,3 +82,5 @@ Węzeł pośredni będzie uruchamiał swój program w konsoli za pomocą
 $ ./CakeNode.sh
 ```
 Gdy paczka dojdzie do adresata, będzie miał możliwość zapisania wiadomości do pliku oraz odpowiedzi.
+## Działanie
+Nadanie wiadomości poprzez dwa węzły pośrednie
