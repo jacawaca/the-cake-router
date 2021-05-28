@@ -24,26 +24,28 @@ odpowiedź wróci do klienta.
 ## Funkcjonalności
 
 Nasz program będzie spełniał następujące wymagania:
-- umożliwi przesyłanie komunikatów UDP (*user datagram protocol*, protokół
+- [X] umożliwi przesyłanie komunikatów UDP (*user datagram protocol*, protokół
 bezstanowy, nie zapewnia retransmisji danych, umożliwia przesyłanie danych
 do wielu użytkowników).
-- ~~możliwość sprawdzenia poprawności danych przy użyciu sumy kontrolnej (np.
-*sha256sum*)~~ Użytkownik otrzymuje instrukcję dotyczącą tego, w jaki sposób może wykonać kontrolę danych. Np. tak
+- [X] Użytkownik otrzymuje instrukcję dotyczącą tego, w jaki sposób może wykonać kontrolę danych. Np. tak
 ```bash
 $ ./CakeClient.sh --help
 ```
-- Klient będzie posiadał listę wszystkich węzłów pośredniczących ($P_i$ oraz WK).
-- ~~Z poziomu klienta będzie możliwy wybór trasy przez N węzłów pośredniczących 
-(na podstawie powyższej listy). Liczba N będzie dowolna, ale mniejsza od ilości.
-dostępnych węzłów pośredniczących.~~
-Klient będzie mógł wygenerować listę węzłów pośrednich za pomocą
+- [X] Klient będzie posiadał listę wszystkich węzłów pośredniczących ($P_i$ oraz WK) zapisaną w pliku konfiguracyjnym.
+- [X] Klient będzie mógł łatwo podejrzeć listę przy pomocy bez znajomości nazwy pliku konfiguracyjnego.
+- [X] Klient będzie mógł wygenerować listę węzłów pośrednich za pomocą
 odpowiedniej funkcji.
-- Komunikaty będą zawierały paczkę złożoną z informacji przesyłanych oraz
-adresów
-- Możliwe będzie przesłanie paczki do innego hosta (który również
+- [X] Komunikaty będą zawierały paczkę złożoną z informacji przesyłanych oraz adresów rozdzielonych średnikiem ```;```.
+- [X] Możliwe będzie przesłanie paczki do innego hosta (który również
 «oferuje» swoje usługi jako węzeł pośredni) i otrzymanie od niego odpowiedzi. W zasadzie, możliwe będzie wysłanie paczki do każdego hosta (węzła). Program węzła pośredniego i adresata jest ten sam.
-- Sieć będzie w stanie obsłużyć równolegle przynajmniej dwóch klientów oraz wielu klientów po sobie. Wiadomość powrotna będzie wysyłana każdemu osobno.
-
+- [X] Sieć będzie w stanie obsłużyć równolegle przynajmniej dwóch klientów oraz wielu klientów po sobie.
+- [X] Wiadomość powrotna będzie wysyłana każdemu klientowi osobno.
+- [X] Adresat nie będzie mógł bezpośrednio zidentyfikować skąd pochodzi wiadomość. Dlatego nadawca powienien się podpisywać w swojej wiadomości.
+- [X] Adresat będzie mógł wpisać swoją odpowiedź w terminalu.
+- [X] Adresat będzie mógł zapisać komunikat do pliku
+- [X] Adresat będzie zabezpieczony przed wpisaniem wiadomości z 
+```;```
+- [X] Przed uruchomieniem programu klienckiego, program (z poziomu powłoki) sprawdzi, czy jest zainstalowana java.
 ## Opis działania programu
 Klient będzie mógł uruchamiać program poprzez poprzez prosty alias. Na potrzeby robocze
 załóżmy, że będzie to cake-router. Aby to osiągnąć, wystarczy
@@ -53,31 +55,23 @@ $ sudo echo "export cake-router=./path/to/file/CakeClient.sh" >> ~/.bash_aliases
 $ cd ~
 $ . .bashrc
 ```
-Zakładamy, że program będzi mógł być używany w następujący sposób
+Zakładamy, że program będzie mógł być używany w następujący sposób
 ``` bash
 usage: cake-router [options]
 options:
 -l --list                             Wyświetla listę dostępnych hostów.  
 ``````
-~~Mogą posłużyć do wyboru węzłów pośrednich przy próbie wysłania~~
 Będzie wczytywał plik config
 ```bash
--s --send [adress] ~~[trasa]~~ [num]
+-s --send [adress]  [msg]
 ```
 Wysyła komunikat na podany adres.
-W przypadku gdyby adres nie został podany, użytkownik ma możliwość
-wyboru adresu z listy. Ewentualnie wyświetli mu się taka lista,
-na podstawie której będzie mógł wybrać adres.
-~~Gdyby trasa nie została podana, to program - o ile to możliwe - 
-użyje domyślnej (wczyta z pliku). Jest możliwość wyboru
-ilości węzłów pośredniczących [num]. Wówczas te węzły są losowe.~~
+Pozostałe opcje
 ```
 --set-trasa                           Ustala domyślną trasę.
 ```
-Program generujący plik konfiguracyjny (FUNKCJONALNOŚĆ OPCJONALNA)
+Program generujący plik konfiguracyjny
 ```
---listen                              Nasłuchuj komunikatów.
-
 --help                                Wyświetla ten komunikat.
 ```
 Rozpatrujemy możliwość zadeklarowania trasy poprzez specjalny
@@ -85,54 +79,30 @@ plik ~~lub odpowiednio zadeklarowaną przy wywołaniu programu
 listę.~~ lub poprzez miniprogram, który uruchomi na się przy użyciu opcji
 --set-trasa.
 ## Obsługa programu
-Klient uruchamia program cake-router w bashu poprzez wpisanie
-``` bash
-$ cake-router
+Klient uruchamia program cake-router w bashu poprzez wpisanie nazwy skryptu np. ```./CakeClient.sh``` lub (Patrz instrukcja) za pomocą odpowiedniego aliasu.
+```
+$ cake-router --help
 ```
 Wyświetla mu się informacja o możliwych opcjach. Następnie
 uruchamia program z opcją list
 ``` bash
 $ cake-router -l
 ```
-Dostaje informacje o ~~możliwych węzłach pośrednich (i docelowych).~~ węzłach
-pośrednich z listy conf.
+Dostaje informacje o węzłach pośrednich z wczytanych z pliku konfiguracyjnego.
 
-~~Przygotowuje trasę i wysyła komunikat np na adres lokalny 192.168.1.03 poprzez 3 węzły pośredniczące~~
+Możliwość wygenerowania pliku z adresami pośrednimi będzie realizowana za pomocą opcji
+```
+$ cake-router --set-trasa
 
+```
+Wysyłka odbywać się będzie za pomocą opcji ```send```. Załóżmy, że użytkownik chce wysłać msg.txt na adres 192.168.1.1
+```
+$ cake-router -s 192.168.1.1 msg.txt
+```
 Po wysłaniu użytkownik programu oczekuje na odpowiedź od nadawcy.
 
-## TO DO
-[//]: # (Aby oznaczyć pozycję w liście za zrobioną zamień [ ] na [X])
-- [ ] 1. Skrypt w Shellu. Uruchomienie programu poprzez javę (coś jak 
-``` sh
-java -jar coś tam coś tam
+Węzeł pośredni będzie uruchamiał swój program w konsoli za pomocą
 ```
-  )
-- [X] 1.1 Skrypt dla klienta
-- [X] 1.2 i dla węzła (Node)
-- [X] 2. Obsługa dwóch klientów na raz. Jeśli to rozumiem tak, że paczki są przesyłanej
-  w tej samej chwili (a nie po sobie), to trzeba będzie pewnie coś pokombinować z tym, jak
-  prevAdress jest używany. Może lista zbiorów {prevAdress, message} tak, żeby można
-  Działa dla klientów mających różne IP. Inaczej port jest zablokowany. JS
-  było zidentyfikować prevAdress z każdym kolejnym klientem.
-- [X] 3. Posprzątać javę: adres jest trzymany w stringu. Można w InetAdress (zamienić pola) JS
-- [ ] 4  W niektórych miejscach kopiowałem kod. Można by zrobić jakąś procedurę jako
-  static w UPDNode. Ale nie trzeba. W sumie łączy się z 3.
-- [X] 5  Niech ostatni węzeł (adresat) wyświetla otrzymaną wiadomość. JS
-- [X] 6  Możliwość ręcznego wpisania odpowiedzi? Wówczas trzeba by ustawić odpowiednio
-  input w UDPNode. JS
-- [X] 7 W ogóle nie wiem, czy nie trzeba będzie rozdzielić przypadków, gdy i) wiadomość
-  dochodzi do adresata ii) wiadomość wraca po węzłach pośredniczących? Łączy się to
-  z 6. i 3., 4. i może 2.
-  Udało się to połączyć w CakeClient JS
-  
-Poniższe rzeczy to po tym jak już zrobimy skrypt (front-end) w bashu na choćby *minimalnej
-funkcjonalności*.
-- [X] 8  Skrypt w Shellu: opcja list JS
-- [X] 9  Skrypt w Shellu: opcja send z różnymi plikami wiadomości JS
-- [X] 10 Skrypt w Shellu: opcja *set trasa* (OPCJONALNIE) JS
-- [ ] 11 Skrypt w Shellu: inne opcje?
-- [X] 12 Skrypt w Shellu: testowanie błędów: co gdy nie ma zainstalowanej javy itp
-Napisałem, ale nwm czy działa JS
-
-- [ ] 13
+$ ./CakeNode.sh
+```
+Gdy paczka dojdzie do adresata, będzie miał możliwość zapisania wiadomości do pliku oraz odpowiedzi.
