@@ -1,5 +1,11 @@
 # Instrukcja obsługi The cake router
 ## Instalacja
+Przejdź do folderu, w którym chcesz zainstalować program, pobierz i rozpakuj
+```
+$ wget https://github.com/jacawaca/the-cake-router/releases/download/cake/v1.0-cake.zip
+$ unzip v1.0-cake.zip
+```
+Skrypty i jary powinny znaleźć się w folderze.
 Skrypt może działać bez instalacji, ale dla ułatwienia celowym może
 być wykorzystanie krótkiego aliasu lub dodanie folderu ze skryptem
 do zmiennej ```$PATH```.
